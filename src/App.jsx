@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import SearchBar from './components/SearchBar';
 import WeatherCard from './components/WeatherCard';
 import Loader from './components/Loader';
@@ -22,7 +22,7 @@ export default function App() {
     setError('');
     setWeather(null);
     setLastCity(city);
-    
+
     try {
       const data = await getWeatherByCity(city);
       setWeather(data);
@@ -40,58 +40,73 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen mx-auto text-center ${isDark ? 'dark-mode' : 'bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100'}`}>
-      <div className="app-container mx-auto text-center">
-        <div className="header-container text-center mx-auto text-center relative">
+    <div
+      className={`min-h-screen w-full px-4 py-8 ${
+        isDark
+          ? 'bg-gray-900 text-white'
+          : 'bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 text-gray-800'
+      } transition-all duration-300`}
+    >
+      <div className="max-w-3xl mx-auto text-center space-y-6">
+        {/* Theme toggle */}
+        <div className="flex justify-end">
           <button
             onClick={() => setIsDark(!isDark)}
-            className="theme-toggle-button"
+            className="p-2 rounded-full bg-white shadow-md hover:scale-105 transition-transform duration-200"
           >
             {isDark ? '☀️' : '🌙'}
           </button>
-          <h1 className={`text-center align-items-center justify-items-center text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r ${isDark ? 'dark-title' : 'from-indigo-600 to-purple-600'} mb-2`}>
+        </div>
+
+        {/* Header */}
+        <div className="space-y-1">
+          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
             Weather Forecast
           </h1>
-          <p className={isDark ? 'text-white' : 'text-gray-600'}>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
             Check the weather for any city around the world
           </p>
         </div>
-        
-        <div className="search-container">
+
+        {/* Search */}
+        <div className="w-full">
           <SearchBar onSearch={handleSearch} />
         </div>
-        
+
+        {/* Loading */}
         {loading && (
-          <div className="component-container flex justify-center items-center">
+          <div className="flex justify-center">
             <Loader />
           </div>
         )}
-        
+
+        {/* Error */}
         {error && (
-          <div className="component-container">
+          <div className="max-w-md mx-auto">
             <ErrorMessage message={error} />
           </div>
         )}
-        
+
+        {/* Weather Card */}
         {weather && (
-          <div className="component-container relative">
-            <button 
+          <div className="relative max-w-xl mx-auto">
+            <button
               onClick={handleRefresh}
-              className="refresh-button"
               title="Refresh weather data"
+              className="absolute top-2 right-2 p-2 bg-white rounded-full shadow hover:rotate-90 transition-transform duration-300"
             >
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                className="h-5 w-5 text-indigo-600" 
-                fill="none" 
-                viewBox="0 0 24 24" 
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-indigo-600"
+                fill="none"
+                viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" 
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                 />
               </svg>
             </button>
